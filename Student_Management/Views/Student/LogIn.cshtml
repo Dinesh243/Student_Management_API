@@ -1,0 +1,45 @@
+﻿@model StudentAppCore.Core.Models.RegisterDetails
+@{
+    Layout = null;
+}
+
+
+
+<body>
+    <h1>Sign in page</h1>
+    @using (Html.BeginForm("Login", "Student", FormMethod.Post, new { id = "myForm" }))
+    {
+        <section class="vh-100">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                            <div class="card-body p-5 text-center">
+
+                                <div class="mb-md-5 mt-md-4 pb-5">
+
+                                    <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                                    <p class="text-white-50 mb-5">Please enter your login and password!</p>
+
+                                    <div id="required" class="form-outline form-white mb-4">
+                                        @Html.Label("User Name:")
+                                        @Html.TextBoxFor(m => m.RegisterName, new { @class = "form-outline mb-4", @id = "Name", @maxlength = 50 })
+                                    </div>
+
+                                    <div id="required" class="form-outline form-white mb-4">
+                                        @Html.Label("Password:")
+                                        @Html.PasswordFor(m => m.Password, new { id = "Pas", @maxlength = 15 })
+                                    </div>
+
+                                    <div>
+                                        <button onclick="Submit()" id="User" class="btn btn-info">Sign In</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+</body>

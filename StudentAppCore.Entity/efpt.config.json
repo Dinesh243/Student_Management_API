@@ -1,0 +1,45 @@
+﻿{
+   "CodeGenerationMode": 1,
+   "ContextClassName": "Student_ManagementContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": true,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "StudentManagement.Entity",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "StudentAppCore.Entity",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[dbo].[Student_Mark_List]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Student_Registration]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "(localdb)\\MSSqlLocalDb.Student_Management",
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": true,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoConstructor": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

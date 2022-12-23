@@ -1,0 +1,120 @@
+﻿@model IEnumerable<StudentAppCore.Core.Models.StudentMarkDetails>
+@{
+    ViewData["Title"] = "ListStudentMarks";
+    int i = 1;
+}
+
+<body>
+    <div class=" text-right">
+        <button type="button" class="btn btn-secondary" onclick="Add();">Add</button>
+    </div>
+
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Sl .No</th>
+                        <th scope="col">Student Name </th>
+                        <th scope="col">Roll No</th>
+                        <th scope="col">Tamil</th>
+                        <th scope="col">English </th>
+                        <th scope="col">Maths </th>
+                        <th scope="col">S </th>
+                        <th scope="col">Address </th>
+                        <th scope="col">Working Location </th>
+                        <th scope="col">Empolyee LogIn Id </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+
+                    <tr>
+
+                        <td>
+                            <span class="text-danger">
+                                @i
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.StudentName)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.RollNo)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.Tamil)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-danger">
+                                @Html.DisplayFor(m => item.English)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-danger">
+                                @Html.DisplayFor(m => item.Maths)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.Science)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.Social)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.Average)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.Total)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-danger">
+                                <button type="button" class="btn btn-success" onclick="edit(@item.StudentId)"></button>
+                                <button type="button" class="btn btn-warning" onclick="Delete(@item.StudentId)"></button>
+
+                            </span>
+                        </td>
+                    </tr>
+                    i++;
+                </tbody>
+            </table>
+        }
+    }
+</body>
+<script>
+    function Add() {
+        window.location.href = "/Student/SaveandEditMarkss";
+    }
+
+    function edit(StdId) {
+        window.location.href = "/Student/SaveandEditMarkss?StdId=" + StdId;
+    }
+
+    
+    function Delete(StdId) {
+        if (confirm("Are sure you want dlt this item")) {
+            window.location.href = "/Student/DeleteMarks?StdId=" + StdId;
+        }
+    }
+
+
+
+</script>

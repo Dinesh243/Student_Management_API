@@ -1,0 +1,96 @@
+﻿@model IEnumerable<StudentAppCore.Core.Models.StudentMarkDetails>
+@{
+    ViewData["Title"] = "ListStudentMarks";
+    int i = 1;
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+
+<body>
+  
+    <table class="table table-hover mb-0">
+        <thead>
+            <tr>
+                <th scope="col">Sl .No</th>
+                <th scope="col">Student Name </th>
+                <th scope="col">Roll No</th>
+                <th scope="col">Tamil</th>
+                <th scope="col">English </th>
+                <th scope="col">Maths </th>
+                <th scope="col">Science </th>
+                <th scope="col">Social </th>
+                <th scope="col">Total </th>
+                <th scope="col">Average</th>
+            </tr>
+        </thead>
+
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+
+
+                <tbody>
+                    <tr>
+
+                        <td>
+                            <span class="text-danger">
+                                @i
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.StudentName)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.RollNo)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.Tamil)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-danger">
+                                @Html.DisplayFor(m => item.English)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-danger">
+                                @Html.DisplayFor(m => item.Maths)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.Science)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.Social)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.Total)
+                            </span>
+
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.Average)
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+
+                i++;
+            }
+        }
+    </table>
+</body>
+

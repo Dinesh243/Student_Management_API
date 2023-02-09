@@ -8,7 +8,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace StudentAppCore.Entity.StudentManagement.Entity
 {
     public partial class Student_Registration
-    {     
+    {
+        public Student_Registration()
+        {
+            Student_Mark_List = new HashSet<Student_Mark_List>();
+        }
+
         [Key]
         public int Reg_Id { get; set; }
         [Required]

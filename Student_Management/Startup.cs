@@ -24,6 +24,11 @@ namespace Student_Management
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+
+            });
             services.AddControllersWithViews();
             DIResolver.ConfigureServices(services);
         }
@@ -45,6 +50,7 @@ namespace Student_Management
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthorization();
 

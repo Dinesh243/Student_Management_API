@@ -4,35 +4,36 @@
     int i = 1;
 }
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+
 <body>
     <div class=" text-right">
         <button type="button" class="btn btn-secondary" onclick="Add();">Add</button>
     </div>
+    <table class="table table-hover mb-0">
+        <thead>
+            <tr>
+                <th scope="col">Sl .No</th>
+                <th scope="col">Student Name </th>
+                <th scope="col">Roll No</th>
+                <th scope="col">Tamil</th>
+                <th scope="col">English </th>
+                <th scope="col">Maths </th>
+                <th scope="col">Science </th>
+                <th scope="col">Social </th>
+                <th scope="col">Total </th>
+                <th scope="col">Average</th>
+            </tr>
+        </thead>
 
-    @if (Model != null)
-    {
-        foreach (var item in Model)
+        @if (Model != null)
         {
+            foreach (var item in Model)
+            {
 
-            <table class="table table-hover mb-0">
-                <thead>
-                    <tr>
-                        <th scope="col">Sl .No</th>
-                        <th scope="col">Student Name </th>
-                        <th scope="col">Roll No</th>
-                        <th scope="col">Tamil</th>
-                        <th scope="col">English </th>
-                        <th scope="col">Maths </th>
-                        <th scope="col">S </th>
-                        <th scope="col">Address </th>
-                        <th scope="col">Working Location </th>
-                        <th scope="col">Empolyee LogIn Id </th>
-                    </tr>
-                </thead>
+
                 <tbody>
-
-
-
                     <tr>
 
                         <td>
@@ -51,38 +52,86 @@
                             </span>
                         </td>
                         <td>
-                            <span class="text-success">
-                                @Html.DisplayFor(m => item.Tamil)
-                            </span>
+                            @if (item.Tamil > 35)
+                            {
+                                <span class="text-success">
+                                    @Html.DisplayFor(m => item.Tamil)
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    @Html.DisplayFor(m => item.Tamil)
+                                </span>
+                            }
                         </td>
                         <td>
-                            <span class="text-danger">
-                                @Html.DisplayFor(m => item.English)
-                            </span>
+                            @if (item.English > 35)
+                            {
+                                <span class="text-success">
+                                    @Html.DisplayFor(m => item.English)
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    @Html.DisplayFor(m => item.English)
+                                </span>
+                            }
                         </td>
                         <td>
-                            <span class="text-danger">
-                                @Html.DisplayFor(m => item.Maths)
-                            </span>
+                            @if (item.Maths > 35)
+                            {
+                                <span class="text-success">
+                                    @Html.DisplayFor(m => item.Maths)
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    @Html.DisplayFor(m => item.Maths)
+                                </span>
+                            }
+
                         </td>
                         <td>
-                            <span class="text-success">
-                                @Html.DisplayFor(m => item.Science)
-                            </span>
+                            @if (item.Science > 35)
+                            {
+                                <span class="text-success">
+                                    @Html.DisplayFor(m => item.Science)
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    @Html.DisplayFor(m => item.Science)
+                                </span>
+                            }
+
                         </td>
                         <td>
-                            <span class="text-success">
-                                @Html.DisplayFor(m => item.Social)
-                            </span>
-                        </td>
-                        <td>
-                            <span class="text-success">
-                                @Html.DisplayFor(m => item.Average)
-                            </span>
+                            @if (item.Social > 35)
+                            {
+                                <span class="text-success">
+                                    @Html.DisplayFor(m => item.Social)
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">
+                                    @Html.DisplayFor(m => item.Social)
+                                </span>
+                            }
                         </td>
                         <td>
                             <span class="text-success">
                                 @Html.DisplayFor(m => item.Total)
+                            </span>
+
+                        </td>
+                        <td>
+                            <span class="text-success">
+                                @Html.DisplayFor(m => item.Average)
                             </span>
                         </td>
                         <td>
@@ -93,28 +142,28 @@
                             </span>
                         </td>
                     </tr>
-                    i++;
                 </tbody>
-            </table>
+
+                i++;
+            }
         }
-    }
+    </table>
 </body>
 <script>
     function Add() {
-        window.location.href = "/Student/SaveandEditMarkss";
+        window.location.href = "/Student/GetStudentMark";
     }
+
 
     function edit(StdId) {
-        window.location.href = "/Student/SaveandEditMarkss?StdId=" + StdId;
+        window.location.href = "/Student/GetStudentMark?StdId=" + StdId;
     }
 
-    
+
     function Delete(StdId) {
         if (confirm("Are sure you want dlt this item")) {
             window.location.href = "/Student/DeleteMarks?StdId=" + StdId;
         }
     }
-
-
 
 </script>

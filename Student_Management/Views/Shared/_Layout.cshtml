@@ -1,4 +1,7 @@
 ﻿<!DOCTYPE html>
+@{
+    bool isLoginPage = TempData["isLoginPage"] != null ? TempData["isLoginPage"].ToString().ToLower() == "true" ? true : false : false;
+}
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,6 +9,11 @@
     <title>@ViewData["Title"] - Student_Management</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
 </head>
 <body>
     <header>
@@ -27,6 +35,12 @@
                     </ul>
                 </div>
             </div>
+            @if (!isLoginPage)
+            {
+                <div class="text-right">
+                    <button type="button" class="btn btn-warning" onclick="SignOut()">SignOut</button>
+                </div>
+            }
         </nav>
     </header>
     <div class="container">
@@ -46,3 +60,11 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+<script>
+
+    function SignOut() {
+        if (confirm("Are sure you want SignOut ")) {
+            window.location.href = "/Student/Login"
+        }
+    }
+</script>

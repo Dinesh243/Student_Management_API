@@ -1,9 +1,18 @@
 ﻿@model StudentAppCore.Core.Models.RegisterDetails
 @{
-    Layout = null;
+    
 }
 
+<style>
+    #required::after {
+        content: "*";
+        color: red;
+    }
 
+    .error {
+        color: red;
+    }
+</style>
 
 <body>
     <h1>Sign in page</h1>
@@ -21,14 +30,22 @@
                                     <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
                                     <p class="text-white-50 mb-5">Please enter your login and password!</p>
 
-                                    <div id="required" class="form-outline form-white mb-4">
-                                        @Html.Label("User Name:")
-                                        @Html.TextBoxFor(m => m.RegisterName, new { @class = "form-outline mb-4", @id = "Name", @maxlength = 50 })
+                                    <div class="form-outline form-white mb-4">
+                                        <span id="required">
+                                            @Html.Label("User Name")
+                                        </span>
+                                        <span>
+                                            @Html.TextBoxFor(m => m.RegisterName, new { @class = "form-outline mb-4", @id = "Name", @maxlength = 50 })
+                                        </span>
                                     </div>
 
-                                    <div id="required" class="form-outline form-white mb-4">
-                                        @Html.Label("Password:")
-                                        @Html.PasswordFor(m => m.Password, new { id = "Pas", @maxlength = 15 })
+                                    <div class="form-outline form-white mb-4">
+                                        <span id="required">
+                                            @Html.Label("Password")
+                                        </span>
+                                        <span>
+                                            @Html.PasswordFor(m => m.Password, new { id = "Pas", @maxlength = 15 })
+                                        </span>
                                     </div>
 
                                     <div>
@@ -43,3 +60,37 @@
         </section>
     }
 </body>
+
+<script>
+
+    $('#myForm').validate({
+        rules: {
+            RegisterName: {
+                required: true,
+                minlength: 1,
+                maxlength: 15,
+
+
+            }, Password: {
+                required: true,
+                minlength: 3,
+                maxlength: 15,
+            },
+        },
+
+        messages: {
+            RegisterName: {
+                required: "RegisterName is required",
+                minlength: "RegisterName must contain at least {0} characters",
+                maxlength: "RegisterName no more than {0} characters",
+
+            }, Password: {
+                required: "Password is required",
+                minlength: "Password must contain at least {0} characters",
+                maxlength: "Password no more than {0} characters",
+
+            },
+        }
+    });
+
+</script>

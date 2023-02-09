@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -17,5 +18,8 @@ namespace StudentAppCore.Core.Models
         public int Social { get; set; }
         public decimal Average { get; set; }
         public int Total { get; set; }
+        public IFormFile Excel { get; set; }
+        public byte[] excelPath { get; set; }
+        public string excelstr { get; set; }
     }
 }

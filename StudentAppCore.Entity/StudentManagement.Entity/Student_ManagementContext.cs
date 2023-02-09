@@ -35,6 +35,8 @@ namespace StudentAppCore.Entity.StudentManagement.Entity
             {
                 entity.Property(e => e.Created_Time_Stamp).HasDefaultValueSql("(getdate())");
 
+                entity.Property(e => e.Excel_String_Path).IsUnicode(false);
+
                 entity.Property(e => e.Student_Name).IsUnicode(false);
 
                 entity.Property(e => e.Updated_Time_Stamp).HasDefaultValueSql("(getdate())");

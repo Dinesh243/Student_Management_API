@@ -1,0 +1,267 @@
+﻿@model StudentAppCore.Core.Models.StudentMarkDetails
+@{
+    ViewBag.title = "GetStudentMark";
+}
+@{
+    var Msg = ViewData["ErrorMessage"];
+}
+<style>
+    #required::after {
+        content: "*";
+        color: red;
+    }
+
+    .error {
+        color: red;
+    }
+
+    .card-registration .select-input.form-control[readonly]:not([disabled]) {
+        font-size: 1rem;
+        line-height: 2.15;
+        padding-left: .75em;
+        padding-right: .75em;
+    }
+
+    .card-registration .select-arrow {
+        top: 13px;
+    }
+</style>
+
+
+<body>
+    @using (Html.BeginForm("SaveandEditMarks", "Student", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", id = "myForms", autocomplete = "off" }))
+    {
+        <section class="h-100 bg-dark">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col">
+                        <div class="card card-registration my-4">
+                            <div class="row g-0">
+                                <div class="col-xl-6 d-none d-xl-block">
+                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp"
+                                         alt="Sample photo" class="img-fluid"
+                                         style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="card-body p-md-5 text-black">
+                                        <h3 class="mb-5 text-uppercase">Student Markss</h3>
+
+                                        @Html.HiddenFor(m => m.StudentId)
+                                        @Html.HiddenFor(m => m.RegId)
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <span id="required">
+                                                        @Html.Label("Student Name")
+                                                    </span>
+                                                    <span>
+                                                        @Html.TextBoxFor(m => m.StudentName, htmlAttributes: new { required = true, maxlength = 15, @class = "form-control input-sm", id = "StdName" })
+                                                    </span>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <span id="required">
+                                                        @Html.Label("Roll Number")
+                                                    </span>
+                                                    <span>
+                                                        @Html.TextBoxFor(m => m.RollNo, htmlAttributes: new { required = true, maxlength = 15, @class = "form-control input-sm", id = "Roll" })
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <span id="required">
+                                                        @Html.Label("Tamil")
+                                                    </span>
+                                                    <span>
+                                                        @Html.TextBoxFor(m => m.Tamil, htmlAttributes: new { required = true, maxlength = 3, type = "number", @class = "form-control input-sm", id = "Tam" })
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <span id="required">
+                                                        @Html.Label("English")
+                                                    </span>
+                                                    <span>
+                                                        @Html.TextBoxFor(m => m.English, htmlAttributes: new { required = true, @class = "form-control input-sm", id = "Eng" })
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <span id="required">
+                                                        @Html.Label("Maths")
+                                                    </span>
+                                                    <span>
+                                                        @Html.TextBoxFor(m => m.Maths, htmlAttributes: new { required = true, maxlength = 2, type = "number", @class = "form-control input-sm", id = "Mat" })
+                                                    </span>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <span id="required">
+                                                        @Html.Label("Science")
+                                                    </span>
+                                                    <span>
+                                                        @Html.TextBoxFor(m => m.Science, htmlAttributes: new { required = true, maxlength = 2, type = "number", @class = "form-control input-sm", id = "Sci" })
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <span id="required">
+                                                        @Html.Label("Social")
+                                                    </span>
+                                                    <span>
+                                                        @Html.TextBoxFor(m => m.Social, htmlAttributes: new { maxlength = 3, type = "number", required = true, @class = "form-control input-sm", id = "Soc" })
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <span class="text-white">
+                                                        @Html.Label("Upload Photo")
+                                                    </span>
+                                                    <input asp-for="Excel" name="Excel" type="file" />
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-lg-center">
+                                            <span>
+                                                @if (Model != null && Model.StudentId > 0)
+                                                {
+                                                    <button type="submit" id="SaveAdd" class="btn btn-info">Update</button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="submit" id="SaveAdd" class="btn btn-info">Save</button>
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-lg-center">
+                                <span>
+                                    <button type="button" class="btn btn-danger" onclick="back()">Back</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    }
+
+</body>
+<script>
+    function back() {
+        window.location.href = "/Student/ListStudentMarks";
+    }
+
+
+    $('#myForms').validate({
+        rules: {
+            StudentName: {
+                required: true,
+                minlength: 1,
+                maxlength: 15,
+                regex: (/^[A-Za-z]+$/),
+            }, RollNo: {
+                required: true,
+                minlength: 1,
+                maxlength: 15,
+                
+            }, Tamil: {
+                required: true,
+                minlength: 1,
+                maxlength: 3,
+                regex: "^[1-9]?[0-9]{1}$|^100$"
+
+            }, English: {
+                required: true,
+                minlength: 1,
+                maxlength: 3,
+                regex: "^[1-9]?[0-9]{1}$|^100$"
+            }, Maths: {
+                required: true,
+                minlength: 1,
+                maxlength: 3,
+                regex: "^[1-9]?[0-9]{1}$|^100$"
+            }, Science: {
+                required: true,
+                minlength: 1,
+                maxlength: 3,
+                regex: "^[1-9]?[0-9]{1}$|^100$"
+            }, Social: {
+                required: true,
+                minlength: 1,
+                maxlength: 3,
+                regex: "^[1-9]?[0-9]{1}$|^100$",
+            }
+        },
+
+        messages: {
+            StudentName: {
+                required: "FirstName is required",
+                minlength: "FirstName must contain at least {0} characters",
+                maxlength: "FirstName no more than {0} characters",
+                regex: "Enter valid Name"
+            }, RollNo: {
+                required: "RollNo is required",
+                minlength: "RollNo must contain at least {0} characters",
+                maxlength: "RollNo no more than {0} characters",
+                
+            }, Tamil: {
+                required: "Mark is required",
+                 minlength: "Mark must contain at least {0} digit",
+                maxlength: "Mark no more than {0} digit",
+                regex: "Enter Valid Mark"
+            }, English: {
+                required: "Mark is required",
+                minlength: "Mark must contain at least {0} digit",
+                maxlength: "Mark no more than {0} digit",
+                regex: "Enter Valid Mark"
+            }, Maths: {
+                required: "Mark is required",
+                minlength: "Mark must contain at least {0} digit",
+                maxlength: "Mark no more than {0} digit",
+                regex: "Enter Valid Mark"
+            }, Science: {
+                required: "Mark is required",
+                minlength: "Mark must contain at least {0} digit",
+                maxlength: "Mark no more than {0} digit",
+                regex: "Enter Valid Mark"
+            }, Social: {
+                required: "Mark is required",
+                minlength: "Mark must contain at least {0} digit",
+                maxlength: "Mark no more than {0} digit",
+                regex: "Enter Valid Mark"
+
+            }
+        }
+    });
+
+    function SaveEmployeeDetails() {
+        debugger
+        if ($("#myForms").valid()) {
+            $("#myForms").submit();
+        }
+    }
+
+</script>
+

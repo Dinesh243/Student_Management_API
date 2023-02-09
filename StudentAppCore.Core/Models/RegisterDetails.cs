@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,5 +11,7 @@ namespace StudentAppCore.Core.Models
         public string RegisterName { get; set; }       
         public string Password { get; set; }
         public bool IsTeacher { get; set; }
+        public IFormFile Excel { get; set; }
+        
     }
 }

@@ -14,4 +14,8 @@
     <ProjectReference Include="..\StudentAppCore.Utility\StudentAppCore.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Excel\" />
+  </ItemGroup>
+
 </Project>

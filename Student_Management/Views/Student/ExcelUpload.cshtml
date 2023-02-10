@@ -1,0 +1,100 @@
+﻿@model StudentAppCore.Core.Models.StudentMarkDetails
+@{
+    ViewBag.title = "GetStudentMark";
+}
+@{
+    var Msg = ViewData["ErrorMessage"];
+}
+<style>
+    #required::after {
+        content: "*";
+        color: red;
+    }
+
+    .error {
+        color: red;
+    }
+
+    .card-registration .select-input.form-control[readonly]:not([disabled]) {
+        font-size: 1rem;
+        line-height: 2.15;
+        padding-left: .75em;
+        padding-right: .75em;
+    }
+
+    .card-registration .select-arrow {
+        top: 13px;
+    }
+</style>
+
+
+<body>
+    @using (Html.BeginForm("SaveandEditMarks", "Student", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", id = "myForms", autocomplete = "off" }))
+    {
+        <section class="h-100 bg-dark">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col">
+                        <div class="card card-registration my-4">
+                            <div class="row g-0">
+                                <div class="col-xl-6 d-none d-xl-block">
+                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp"
+                                         alt="Sample photo" class="img-fluid"
+                                         style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="card-body p-md-5 text-black">
+                                        <h3 class="mb-5 text-uppercase">Student Markss</h3>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="col-md-6 mb-4">
+                                                    <div class="form-outline">
+                                                        <span class="text-white">
+                                                            @Html.Label("Upload Photo")
+                                                        </span>
+                                                        <input asp-for="Excel" name="Excel" type="file" />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-lg-center">
+                                            <span>
+                                                @if (Model != null && Model.StudentId > 0)
+                                                {
+                                                    <button type="submit" id="SaveAdd" class="btn btn-info">Update</button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="submit" id="SaveAdd" class="btn btn-info">Save</button>
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-lg-center">
+                                <span>
+                                    <button type="button" class="btn btn-danger" onclick="back()">Back</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    }
+
+</body>
+<script>
+    function back() {
+        window.location.href = "/Student/ListStudentMarks";
+    }
+
+</script>
+
+

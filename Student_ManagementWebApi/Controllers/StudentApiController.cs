@@ -43,9 +43,15 @@ namespace Student_ManagementWebApi.Controllers
 
         #region Save and Update Student Marks
         [HttpPost]
-        public IActionResult SaveandUpdateMarks(StudentMarkDetails marks)
+        public IActionResult SaveandUpdateMarks(List<StudentMarkDetails> marks)
         {
              _Iservice.AddandUpdateMarks(marks);
+            return Ok();
+        }
+        [HttpPost]
+        public IActionResult UpdateMarks(StudentMarkDetails marks)
+        {
+             _Iservice.UpdateMarks(marks);
             return Ok();
         }
         #endregion
@@ -77,9 +83,7 @@ namespace Student_ManagementWebApi.Controllers
         }
         #endregion
 
-
     }
-
 }
 
 

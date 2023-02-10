@@ -32,9 +32,13 @@ namespace StudentAppCore.Service.StudentSevice
         #endregion
 
         #region Save and Edit Student Marks
-        public void AddandUpdateMarks(StudentMarkDetails marks)
+        public void AddandUpdateMarks(List<StudentMarkDetails> marks)
         {
             _repository.AddandUpdateMarks(marks);
+        }
+        public void UpdateMarks(StudentMarkDetails marks)
+        {
+            _repository.UpdateMarks(marks);
         }
         #endregion
 

@@ -232,8 +232,8 @@ namespace StudentAppCore.Resource.StudentRepository
                         Addmarks.Maths = marks.Maths;
                         Addmarks.Science = marks.Science;
                         Addmarks.Social = marks.Social;
-                        Addmarks.Total = marks.Total;
-                        Addmarks.Average = marks.Average;
+                        Addmarks.Total = (marks.Tamil+marks.English+marks.Maths+marks.Science+marks.Social);
+                        Addmarks.Average = (Addmarks.Total/5);
                         Addmarks.Updated_Time_Stamp = DateTime.Now;
                         if (isRecordExist == false)
                         {

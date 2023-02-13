@@ -31,6 +31,13 @@ namespace StudentAppCore.Service.StudentSevice
         }
         #endregion
 
+        #region NewStudent
+        public NewStudentRegitration NewStudent(NewStudentRegitration newStudent)
+        {
+            return _repository.NewStudent(newStudent);
+        }
+        #endregion
+
         #region Save and Edit Student Marks
         public void AddandUpdateMarks(List<StudentMarkDetails> marks)
         {

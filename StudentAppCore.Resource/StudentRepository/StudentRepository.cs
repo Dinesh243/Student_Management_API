@@ -67,6 +67,44 @@ namespace StudentAppCore.Resource.StudentRepository
         }
         #endregion
 
+        #region NewStudent
+        public NewStudentRegitration NewStudent(NewStudentRegitration newStudent)
+        {
+            NewStudentRegitration Obj = new NewStudentRegitration();
+            if (newStudent != null)
+            {
+                using (var Entity = new Student_ManagementContext())
+                {
+                    Student_Registration AddStudent = new Student_Registration();
+                    bool isRecordExist = false;
+                    AddStudent = Entity.Student_Registration.Where(x => x.Reg_Id == newStudent.RegId && !x.Is_Delated).SingleOrDefault();
+                    if (AddStudent != null)
+                    {
+                        isRecordExist = true;
+                    }
+                    else
+                    {
+                        AddStudent = new Student_Registration();
+                    }
+                    AddStudent.Register_Name = newStudent.RegisterName;
+                    AddStudent.Password = newStudent.Password;
+                    AddStudent.Is_Teacher = newStudent.IsTeacher;
+                    AddStudent.Updated_Time_Stamp = DateTime.Now;
+                    if (isRecordExist == false)
+                    {
+                        AddStudent.Created_Time_Stamp = DateTime.Now;
+                        AddStudent.Is_Delated = false;
+                        Entity.Student_Registration.Add(AddStudent);
+                    }
+                    Entity.SaveChanges();
+                    Obj.IsTeacher = AddStudent.Is_Teacher;
+                    Obj.RegId = AddStudent.Reg_Id;
+                }
+            }
+            return Obj;
+        }
+        #endregion
+
         #region Save and Edit the Student Marks
         public void AddandUpdateMarks(List<StudentMarkDetails> marks)
         {
@@ -106,148 +144,52 @@ namespace StudentAppCore.Resource.StudentRepository
                         }
                         Entity.SaveChanges();
                     }
-                    
-                    //ExcelUpload(marks.excelPath, Addmarks.Student_Id);
                 }
             }
         }
         #endregion
-        //public void ExcelUpload(byte[] file,int Save)
-        //{
-        //    string incorrectName, incorrectRollno, incorrectTamilmarks, incorrectEnglishmarks, incorrectMathsmarks, incorrectSciencemarks, incorrectSocialmarks, incorrectTotalmarks, incorrectAveragemarks;
-        //    List<StudentMarkDetails> data = new List<StudentMarkDetails>();
-        //    if (file != null)
-        //    {
-        //        var fileString = Encoding.ASCII.GetString(file);
 
-        //        string filePath = "D:\\Web Api Crud Operation\\Student_Management\\Student_Management_WebApi\\Student_Management\\wwwroot\\Excel\\Marks" +Save+ ".xlsx";
-
-        //        string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
-        //        using (FileStream fs = new FileStream(filePath, FileMode.Create))
-        //        {
-        //            using (BinaryWriter bs = new BinaryWriter(fs))
-        //            {
-        //                //string s1 = file1 + ".xlsx";
-        //                bs.Write(file);
-        //                bs.Close();
-        //            }
-        //        }
-
-        //        using (OleDbConnection connection = new OleDbConnection(connectionString))
-        //        {
-        //            connection.Open();
-        //            var adapter = new OleDbDataAdapter("SELECT * FROM [Sheet1$]", connectionString);
-        //            var ds = new DataSet();
-        //            adapter.Fill(ds, "ExcelTable");
-        //            DataTable dtable = ds.Tables["ExcelTable"];
-        //            string sheetName = "Sheet1";
-        //            var excelFile = new ExcelQueryFactory(filePath);
-        //            var studentMarks = from a in excelFile.Worksheet<StudentMarkDetails>(sheetName) select a;
-        //            foreach (var a in studentMarks)
-        //            {
-        //                StudentMarkDetails marks = new StudentMarkDetails();
-        //                marks.StudentName = a.StudentName;
-        //                if (marks.StudentName == null || marks.StudentName=="" || marks.StudentName.All(char.IsDigit))
-        //                {
-        //                   incorrectName = "Student name is incorrect";
-        //                    break;
-        //                }
-        //                marks.RollNo = a.RollNo;
-        //                if (marks.RollNo==0 || marks.RollNo.ToString() == "" || marks.RollNo.ToString().All(char.IsLetter))
-        //                {
-        //                    incorrectRollno = "Roll No incorect";
-        //                    break;
-        //                }
-        //                marks.Tamil = a.Tamil;
-        //                if (marks.Tamil < 0 || marks.Tamil.ToString() == "" || marks.Tamil>100)
-        //                {
-        //                    incorrectTamilmarks = "Tamil Marks incorect";
-        //                    break;
-        //                }
-        //                marks.English = a.English;
-        //                if (marks.English < 0 || marks.English.ToString() == "" || marks.English > 100 )
-        //                {
-        //                    incorrectEnglishmarks = "English Marks incorect";
-        //                    break;
-        //                }
-        //                marks.Maths = a.Maths;
-        //                if (marks.Maths < 0 || marks.Maths.ToString() == "" || marks.Maths > 100)
-        //                {
-        //                    incorrectMathsmarks = "Maths Marks incorect";
-        //                    break;
-        //                }
-        //                marks.Science = a.Science;
-        //                if (marks.Science < 0 || marks.Science.ToString() == "" || marks.Science > 100)
-        //                {
-        //                    incorrectSciencemarks = "Science Marks incorect";
-        //                    break;
-        //                }
-        //                marks.Social = a.Social;
-        //                if (marks.Social < 0 || marks.Social.ToString() == "" || marks.Social > 100)
-        //                {
-        //                    incorrectSocialmarks = "Social Marks incorect";
-        //                    break;
-        //                }
-        //                marks.Total = a.Total;
-        //                if (marks.Total < 0 || marks.Total.ToString() == "" || marks.Total > 500)
-        //                {
-        //                    incorrectTotalmarks = "Total Marks incorect";
-        //                    break;
-        //                }
-        //                marks.Average = a.Average;
-        //                if (marks.Average < 0 || marks.Tamil.ToString() == "" || marks.Average > 101  )
-        //                {
-        //                    incorrectAveragemarks = "Average Marks incorect";
-        //                    break;
-        //                }
-        //                data.Add(marks);
-        //            }
-        //        }
-
-        //    }
-        //}
+        #region Edit and Update student marks manually
         public void UpdateMarks(StudentMarkDetails marks)
         {
             if (marks != null)
             {
                 using (var Entity = new Student_ManagementContext())
                 {
-                  
-                        Student_Mark_List Addmarks = new Student_Mark_List();
-                        bool isRecordExist = false;
-                        Addmarks = Entity.Student_Mark_List.Where(x => x.Student_Id == marks.StudentId && !x.Is_Deleted).SingleOrDefault();
-                        if (Addmarks != null)
-                        {
-                            isRecordExist = true;
-                        }
-                        else
-                        {
-                            Addmarks = new Student_Mark_List();
-                        }
-                        Addmarks.Reg_Id = 2;
-                        Addmarks.Student_Name = marks.StudentName;
-                        Addmarks.Roll_No = marks.RollNo;
-                        Addmarks.Tamil = marks.Tamil;
-                        Addmarks.English = marks.English;
-                        Addmarks.Maths = marks.Maths;
-                        Addmarks.Science = marks.Science;
-                        Addmarks.Social = marks.Social;
-                        Addmarks.Total = (marks.Tamil+marks.English+marks.Maths+marks.Science+marks.Social);
-                        Addmarks.Average = (Addmarks.Total/5);
-                        Addmarks.Updated_Time_Stamp = DateTime.Now;
-                        if (isRecordExist == false)
-                        {
-                            Addmarks.Created_Time_Stamp = DateTime.Now;
-                            Addmarks.Is_Deleted = false;
-                            Entity.Student_Mark_List.Add(Addmarks);
-                        }
-                        Entity.SaveChanges();
-                    
 
-                    //ExcelUpload(marks.excelPath, Addmarks.Student_Id);
+                    Student_Mark_List Addmarks = new Student_Mark_List();
+                    bool isRecordExist = false;
+                    Addmarks = Entity.Student_Mark_List.Where(x => x.Student_Id == marks.StudentId && !x.Is_Deleted).SingleOrDefault();
+                    if (Addmarks != null)
+                    {
+                        isRecordExist = true;
+                    }
+                    else
+                    {
+                        Addmarks = new Student_Mark_List();
+                    }
+                    Addmarks.Reg_Id = 2;
+                    Addmarks.Student_Name = marks.StudentName;
+                    Addmarks.Roll_No = marks.RollNo;
+                    Addmarks.Tamil = marks.Tamil;
+                    Addmarks.English = marks.English;
+                    Addmarks.Maths = marks.Maths;
+                    Addmarks.Science = marks.Science;
+                    Addmarks.Social = marks.Social;
+                    Addmarks.Total = (marks.Tamil + marks.English + marks.Maths + marks.Science + marks.Social);
+                    Addmarks.Average = (Addmarks.Total / 5);
+                    Addmarks.Updated_Time_Stamp = DateTime.Now;
+                    if (isRecordExist == false)
+                    {
+                        Addmarks.Created_Time_Stamp = DateTime.Now;
+                        Addmarks.Is_Deleted = false;
+                        Entity.Student_Mark_List.Add(Addmarks);
+                    }
+                    Entity.SaveChanges();
                 }
             }
         }
+        #endregion
 
         #region Send Student Marks to Edit Page
         public StudentMarkDetails GivenDataToEdit(int StdId)

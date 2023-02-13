@@ -16,6 +16,57 @@ namespace Student_Management.Controllers
 {
     public class StudentController : Controller
     {
+        #region Log In Page Get And Post Method
+        [HttpGet]
+        public IActionResult Login()
+        {
+            TempData["isLoginPage"] = true;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Login(RegisterDetails details)
+        {
+            if (details != null)
+            {
+                //DecPass(details.Password);
+                //string pass = DecPass(details.Password);
+                //details.Password = pass;
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:53377/StudentApi/Login");
+                    var result = client.PostAsJsonAsync<RegisterDetails>(client.BaseAddress, details).Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var LogInDetails = result.Content.ReadAsAsync<RegisterDetails>().Result;
+                        if (LogInDetails.IsTeacher)
+                        {
+                            HttpContext.Session.SetString("RegId", LogInDetails.RegId.ToString());
+                            return RedirectToAction("ListStudentMarks", new { RegId = LogInDetails.RegId });
+                        }
+                        else
+                        {
+                            HttpContext.Session.SetString("RegId", LogInDetails.RegId.ToString());
+                            return RedirectToAction("ShowStudentDetails", new { RegId = LogInDetails.RegId });
+                        }
+
+                    }
+                }
+            }
+            return RedirectToAction("Login");
+        }
+        //public string DecPass(string pass)
+        //{
+        //    UTF8Encoding encoder = new System.Text.UTF8Encoding();
+        //    Decoder utf8Decode = encoder.GetDecoder();
+        //    byte[] decode_byte =  Encoding.ASCII.GetBytes(pass);
+        //    int Count = utf8Decode.GetCharCount(decode_byte, 0, decode_byte.Length);
+        //    char[] decoded_char = new char[Count];
+        //    utf8Decode.GetChars(decode_byte, 0, decode_byte.Length, decoded_char, 0);
+        //    string result = new String(decoded_char);
+        //    return result;
+        //}
+        #endregion
+
         #region List Student Marks
         [HttpGet]
         public IActionResult ListStudentMarks()
@@ -40,38 +91,45 @@ namespace Student_Management.Controllers
         }
         #endregion
 
-        #region Log In Page Get And Post Method
-        [HttpGet]
-        public IActionResult Login()
+        #region New Student Regitration
+        public IActionResult NewStudent()
         {
-            TempData["isLoginPage"] = true;
             return View();
         }
         [HttpPost]
-        public IActionResult Login(RegisterDetails details)
+        public IActionResult NewStudent(NewStudentRegitration newStudent)
         {
-            using (var client = new HttpClient())
+            if (newStudent != null)
             {
-                client.BaseAddress = new Uri("http://localhost:53377/StudentApi/Login");
-                var result = client.PostAsJsonAsync<RegisterDetails>(client.BaseAddress, details).Result;
-                if (result.IsSuccessStatusCode)
+                if (newStudent.IsTeach=="Teacher")
                 {
-                    var LogInDetails = result.Content.ReadAsAsync<RegisterDetails>().Result;
-                    if (LogInDetails.IsTeacher)
+                    newStudent.IsTeacher = true;
+                }
+                else
+                {
+                    newStudent.IsTeacher = false;
+                }
+                //string encPass=EncryptPassword(newStudent.Password);
+                //newStudent.Password = encPass;
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:53377/StudentApi/NewStudent");
+                    var result = client.PostAsJsonAsync<NewStudentRegitration>(client.BaseAddress, newStudent).Result;
+                    if (result.IsSuccessStatusCode)
                     {
-                        HttpContext.Session.SetString("RegId", LogInDetails.RegId.ToString());
-                        return RedirectToAction("ListStudentMarks", new { RegId = LogInDetails.RegId });
+                        return RedirectToAction("Login");
                     }
-                    else
-                    {
-                        HttpContext.Session.SetString("RegId", LogInDetails.RegId.ToString());
-                        return RedirectToAction("ShowStudentDetails", new { RegId = LogInDetails.RegId });
-                    }
-
                 }
             }
-            return RedirectToAction("Login");
+            return View();
         }
+        //public string EncryptPassword(string encPass)
+        //{
+        //    byte[] encDataByte = new byte[encPass.Length];
+        //    encDataByte =Encoding.UTF8.GetBytes(encPass);
+        //    string encodedData = Convert.ToBase64String(encDataByte);
+        //    return encodedData;
+        //}
         #endregion
 
         #region Get Student Marks
@@ -95,7 +153,7 @@ namespace Student_Management.Controllers
         }
         #endregion
 
-        #region Save And Edit Student Marks
+        #region Uploading Excel Sheet 
         [HttpPost]
         public IActionResult SaveandEditMarks(StudentMarkDetails details)
         {
@@ -112,15 +170,13 @@ namespace Student_Management.Controllers
                         byte[] file = Convert.FromBase64String(s);
                         // act on the Base64 data
                         details.excelPath = file;
-                        details.Excel.CopyTo(ms);
+                        //details.Excel.CopyTo(ms);
                         //details.Excel = null;
                     }
                 }
                 string FileFormat = details.Excel.FileName;
                 if (FileFormat.EndsWith(".xlsx") || FileFormat.EndsWith(".xls"))
                 {
-                    string incorrect;
-
 
                     //var fileString = Encoding.ASCII.GetString(details.excelPath);
 
@@ -153,49 +209,49 @@ namespace Student_Management.Controllers
                             marks.StudentName = a.StudentName;
                             if (marks.StudentName == null || marks.StudentName == "" || marks.StudentName.All(char.IsDigit))
                             {
-                                incorrect = "Student name is incorrect . Student Roll No" + marks.RollNo;
+                                TempData["ErrorMsg"] = "Student name is incorrect . Student Roll No" ;
                                 data = null;
                                 break;
                             }
                             marks.RollNo = a.RollNo;
                             if (marks.RollNo == 0 || marks.RollNo.ToString() == "" || marks.RollNo.ToString().All(char.IsLetter))
                             {
-                                incorrect = "Roll No incorect";
+                                TempData["ErrorMsg"] = "Roll No incorect"+ marks.StudentName;
                                 data = null;
                                 break;
                             }
                             marks.Tamil = a.Tamil;
                             if (marks.Tamil < 0 || marks.Tamil.ToString() == "" || marks.Tamil > 100)
                             {
-                                incorrect = "Tamil Marks incorect";
+                                TempData["ErrorMsg"] = "Tamil Marks incorect" + marks.RollNo + "check This Roll no in Excel Sheer";
                                 data = null;
                                 break;
                             }
                             marks.English = a.English;
                             if (marks.English < 0 || marks.English.ToString() == "" || marks.English > 100)
                             {
-                                incorrect = "English Marks incorect";
+                                TempData["ErrorMsg"] = "English Marks incorect" + marks.RollNo + "check This Roll no in Excel Sheer";
                                 data = null;
                                 break;
                             }
                             marks.Maths = a.Maths;
                             if (marks.Maths < 0 || marks.Maths.ToString() == "" || marks.Maths > 100)
                             {
-                                incorrect = "Maths Marks incorect";
+                                TempData["ErrorMsg"] = "Maths Marks incorect" + marks.RollNo + "check This Roll no in Excel Sheer";
                                 data = null;
                                 break;
                             }
                             marks.Science = a.Science;
                             if (marks.Science < 0 || marks.Science.ToString() == "" || marks.Science > 100)
                             {
-                                incorrect = "Science Marks incorect";
+                                TempData["ErrorMsg"] = "Science Marks incorect" + marks.RollNo + "check This Roll no in Excel Sheer";
                                 data = null;
                                 break;
                             }
                             marks.Social = a.Social;
                             if (marks.Social < 0 || marks.Social.ToString() == "" || marks.Social > 100)
                             {
-                                incorrect = "Social Marks incorect";
+                                TempData["ErrorMsg"] = "Social Marks incorect" + marks.RollNo+"check This Roll no in Excel Sheer";
                                 data = null;
                                 break;
                             }
@@ -207,7 +263,7 @@ namespace Student_Management.Controllers
                             cmd.Parameters.AddWithValue("@total", marks.Total);
                             cmd.Parameters.AddWithValue("@avarege", marks.Average);
                             cmd.Parameters.AddWithValue("@roll", marks.RollNo);
-                            cmd.Connection = connection;
+                            //cmd.Connection = connection;
                             //connection.Open();
                             cmd.ExecuteNonQuery();
                             data.Add(marks);
@@ -228,20 +284,23 @@ namespace Student_Management.Controllers
                         }
                         else
                         {
-                            TempData["ErrorMsg"] = "Please Check";
+                            return RedirectToAction("ExcelUpload");
                         }
                     }
                 }
                 else
                 {
                     TempData["ErrorMsg"] = "Please Upload correct Excel File";
+                    return RedirectToAction("ExcelUpload");
                 }
 
             }
             TempData["ErrorMsg"] = "Please Upload Excel File";
-            return RedirectToAction("GetStudentMark");
+            return RedirectToAction("ExcelUpload");
         }
         #endregion
+
+        #region UpdateMarks
         public IActionResult UpdateMarks(StudentMarkDetails markDetails)
         {
             if (markDetails != null)
@@ -259,6 +318,7 @@ namespace Student_Management.Controllers
             }
             return View();
         }
+        #endregion
 
         #region Delete The Student Mark
         public IActionResult DeleteMarks(int StdId)
@@ -300,10 +360,14 @@ namespace Student_Management.Controllers
             }
         }
         #endregion
+
+        #region ExcelUpload GetMethod
         public IActionResult ExcelUpload()
         {
             return View();
         }
+        #endregion
+
     }
 
 }

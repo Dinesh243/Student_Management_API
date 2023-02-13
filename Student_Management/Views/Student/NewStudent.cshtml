@@ -1,0 +1,82 @@
+﻿@model StudentAppCore.Core.Models.NewStudentRegitration
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+}
+<body>
+    <h1>Sign in page</h1>
+    @using (Html.BeginForm("NewStudent", "Student", FormMethod.Post, new { id = "myForm" }))
+    {
+        <section class="h-100 bg-dark">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col">
+                        <div class="card card-registration my-4">
+                            <div class="row g-0">
+                                <div class="col-xl-6 d-none d-xl-block">
+                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp"
+                                         alt="Sample photo" class="img-fluid"
+                                         style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="card-body p-md-5 text-black">
+                                        <h3 class="mb-5 text-uppercase">Student Markss</h3>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <span id="required">
+                                                        @Html.Label("Student Name")
+                                                    </span>
+                                                    <span>
+                                                        @Html.TextBoxFor(m => m.RegisterName, htmlAttributes: new { required = true, maxlength = 15, @class = "form-control input-sm", id = "StdName" })
+                                                    </span>
+
+                                                </div>
+                                            </div>
+                                           
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <span id="required">
+                                                        @Html.Label("Password")
+                                                    </span>
+                                                    <span>
+                                                        @Html.PasswordFor(m => m.Password, htmlAttributes: new { required = true, maxlength = 3, @class = "form-control input-sm"})
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <span>
+                                                        @Html.Label("Role")
+                                                    </span>
+                                                    <span id="required">
+                                                        @Html.RadioButtonFor(m => m.IsTeach, "Student")
+                                                        @Html.Label("Student")
+                                                   
+                                                        @Html.RadioButtonFor(m => m.IsTeach, "Teacher")
+                                                        @Html.Label("Teacher")
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-lg-center">
+                                            <span>
+                                                    <button type="submit" id="SaveAdd" class="btn btn-info">Update</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+</body>

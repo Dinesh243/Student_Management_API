@@ -24,9 +24,6 @@ namespace StudentAppCore.Entity.StudentManagement.Entity
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Average { get; set; }
         public int Total { get; set; }
-        public byte[] Excel_Path { get; set; }
-        [StringLength(200)]
-        public string Excel_String_Path { get; set; }
         public bool Is_Deleted { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime Created_Time_Stamp { get; set; }

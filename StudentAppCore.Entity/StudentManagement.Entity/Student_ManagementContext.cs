@@ -17,6 +17,7 @@ namespace StudentAppCore.Entity.StudentManagement.Entity
         {
         }
 
+        public virtual DbSet<Excel_Identifier> Excel_Identifier { get; set; }
         public virtual DbSet<Student_Mark_List> Student_Mark_List { get; set; }
         public virtual DbSet<Student_Registration> Student_Registration { get; set; }
 
@@ -31,11 +32,16 @@ namespace StudentAppCore.Entity.StudentManagement.Entity
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Excel_Identifier>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.Excel_Path).IsUnicode(false);
+            });
+
             modelBuilder.Entity<Student_Mark_List>(entity =>
             {
                 entity.Property(e => e.Created_Time_Stamp).HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Excel_String_Path).IsUnicode(false);
 
                 entity.Property(e => e.Student_Name).IsUnicode(false);
 

@@ -83,6 +83,18 @@ namespace Student_ManagementWebApi.Controllers
         }
         #endregion
 
+        #region newStudent
+        [HttpPost]
+        public IActionResult newStudent(NewStudentRegitration newStudent)
+        {
+            if (newStudent != null)
+            {
+                _Iservice.NewStudent(newStudent);
+                return Ok();
+            }
+            return NotFound();
+        }
+        #endregion
     }
 }
 

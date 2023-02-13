@@ -59,9 +59,18 @@
             </div>
         </section>
     }
+
+    <div>
+        <button onclick="NewStudent()" id="User" class="btn btn-info">Sign Up</button>
+    </div>
+
 </body>
 
 <script>
+
+    function NewStudent() {
+        window.location.href = "/Student/NewStudent";
+    }
 
     $('#myForm').validate({
         rules: {

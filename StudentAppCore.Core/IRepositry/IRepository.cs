@@ -14,5 +14,6 @@ namespace StudentAppCore.Core.IRepositry
         bool DeleteStudentMarks(int StdId);
         StudentMarkDetails GivenDataToEdit(int StdId);
         List<StudentMarkDetails> ViewStudentMarks(int RegId);
+        NewStudentRegitration NewStudent(NewStudentRegitration newStudent);
     }
 }

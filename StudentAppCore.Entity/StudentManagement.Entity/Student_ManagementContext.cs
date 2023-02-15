@@ -58,9 +58,11 @@ namespace StudentAppCore.Entity.StudentManagement.Entity
             {
                 entity.Property(e => e.Created_Time_Stamp).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Password).IsUnicode(false);
+                entity.Property(e => e.Hash).IsUnicode(false);
 
                 entity.Property(e => e.Register_Name).IsUnicode(false);
+
+                entity.Property(e => e.Salt).IsUnicode(false);
 
                 entity.Property(e => e.Updated_Time_Stamp).HasDefaultValueSql("(getdate())");
             });

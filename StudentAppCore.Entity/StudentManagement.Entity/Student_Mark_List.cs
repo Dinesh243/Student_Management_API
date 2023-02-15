@@ -13,7 +13,7 @@ namespace StudentAppCore.Entity.StudentManagement.Entity
         public int Student_Id { get; set; }
         public int Reg_Id { get; set; }
         [Required]
-        [StringLength(15)]
+        [StringLength(30)]
         public string Student_Name { get; set; }
         public int Roll_No { get; set; }
         public int Tamil { get; set; }

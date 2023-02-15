@@ -10,6 +10,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace StudentAppCore.Resource.StudentRepository
@@ -55,53 +56,113 @@ namespace StudentAppCore.Resource.StudentRepository
             {
                 using (var Entity = new Student_ManagementContext())
                 {
-                    var DBdetails = Entity.Student_Registration.Where(x => x.Register_Name == details.RegisterName && x.Password == details.Password && !x.Is_Delated).SingleOrDefault();
+                    var DBdetails = Entity.Student_Registration.Where(x => x.Register_Name == details.RegisterName && !x.Is_Delated).SingleOrDefault();
                     if (DBdetails != null)
                     {
-                        login.RegId = DBdetails.Reg_Id;
-                        login.IsTeacher = DBdetails.Is_Teacher;
+                        bool pass = VerifyPassword(details.Password, DBdetails.Salt, DBdetails.Hash);
+                        if (pass)
+                        {
+                            login.RegId = DBdetails.Reg_Id;
+                            login.IsTeacher = DBdetails.Is_Teacher;
+                        }
+                        login = null;
                     }
+
                 }
             }
             return login;
         }
         #endregion
 
+        #region 
+        public bool VerifyPassword(string password, byte[] salt, byte[] hash)
+        {
+           
+            byte[] newHash;
+            using (var deriveBytes = new Rfc2898DeriveBytes(password, salt, 1000))
+            {
+                newHash = deriveBytes.GetBytes(8);
+            }
+            if (newHash.Length != hash.Length)
+            {
+                return false;
+            }
+            for (int i = 0; i < newHash.Length; i++)
+            {
+                if (newHash[i] != hash[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         #region NewStudent
         public NewStudentRegitration NewStudent(NewStudentRegitration newStudent)
         {
-            NewStudentRegitration Obj = new NewStudentRegitration();
-            if (newStudent != null)
+            try
             {
-                using (var Entity = new Student_ManagementContext())
+                string salt = GenerateSalt();
+                string hash = GenerateHash(newStudent.Password, salt);
+                //string hash = GenerateHash(newStudent.Password, salt);
+                NewStudentRegitration Obj = new NewStudentRegitration();
+                if (newStudent != null)
                 {
-                    Student_Registration AddStudent = new Student_Registration();
-                    bool isRecordExist = false;
-                    AddStudent = Entity.Student_Registration.Where(x => x.Reg_Id == newStudent.RegId && !x.Is_Delated).SingleOrDefault();
-                    if (AddStudent != null)
+                    using (var Entity = new Student_ManagementContext())
                     {
-                        isRecordExist = true;
+                        Student_Registration AddStudent = new Student_Registration();
+                       var AddStudents = Entity.Student_Registration.Where(x => x.Register_Name == newStudent.RegisterName && !x.Is_Delated).FirstOrDefault();
+                        if (AddStudents == null)
+                        {
+                            AddStudent.Register_Name = newStudent.RegisterName;
+                            AddStudent.Salt = salt;
+                            AddStudent.Hash = hash;
+                            AddStudent.Is_Teacher = newStudent.IsTeacher;
+                            AddStudent.Updated_Time_Stamp = DateTime.Now;
+                            AddStudent.Created_Time_Stamp = DateTime.Now;
+                            AddStudent.Is_Delated = false;
+                            Entity.Student_Registration.Add(AddStudent);
+                            Entity.SaveChanges();
+                            Obj.IsTeacher = AddStudent.Is_Teacher;
+                            Obj.RegId = AddStudent.Reg_Id;
+                        }
                     }
-                    else
-                    {
-                        AddStudent = new Student_Registration();
-                    }
-                    AddStudent.Register_Name = newStudent.RegisterName;
-                    AddStudent.Password = newStudent.Password;
-                    AddStudent.Is_Teacher = newStudent.IsTeacher;
-                    AddStudent.Updated_Time_Stamp = DateTime.Now;
-                    if (isRecordExist == false)
-                    {
-                        AddStudent.Created_Time_Stamp = DateTime.Now;
-                        AddStudent.Is_Delated = false;
-                        Entity.Student_Registration.Add(AddStudent);
-                    }
-                    Entity.SaveChanges();
-                    Obj.IsTeacher = AddStudent.Is_Teacher;
-                    Obj.RegId = AddStudent.Reg_Id;
                 }
+                return Obj;
             }
-            return Obj;
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            
+        }
+        public string GenerateSalt()
+        {
+            byte[] salt = new byte[8];
+            using (var random = new RNGCryptoServiceProvider())
+            {
+                  random.GetBytes(salt);
+            }
+            string randomSalt = Encoding.Default.GetString(salt);
+            return randomSalt;
+        }
+        //private string CreatePasswordHash(string pwd, string salt)
+        //{
+        //    string saltAndPwd = String.Concat(pwd, salt);
+        //    string hashedPwd = FormsAuthentication.HashPasswordForStoringInConfigFile(saltAndPwd, "sha1");
+        //    return hashedPwd;
+        //}
+        public string GenerateHash(string password, string salt)
+        {
+            byte[] saltBytes = Encoding.Default.GetBytes(salt);
+            byte[] hash;
+            //byte[] saltBytes = salt ;
+
+            using (var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, saltBytes, 1000))
+            {
+                hash = rfc2898DeriveBytes.GetBytes(8);
+            }
+            return Encoding.Default.GetString(hash);
         }
         #endregion
 

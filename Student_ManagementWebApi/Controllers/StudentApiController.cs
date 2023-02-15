@@ -26,7 +26,6 @@ namespace Student_ManagementWebApi.Controllers
         [HttpPost]
         public IActionResult Login(RegisterDetails details)
         {
-
             var LogInDetails = _Iservice.LogInDetails(details);
             return Ok(LogInDetails);
         }

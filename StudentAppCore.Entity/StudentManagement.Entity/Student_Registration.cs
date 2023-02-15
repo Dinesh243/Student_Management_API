@@ -17,11 +17,14 @@ namespace StudentAppCore.Entity.StudentManagement.Entity
         [Key]
         public int Reg_Id { get; set; }
         [Required]
-        [StringLength(15)]
+        [StringLength(30)]
         public string Register_Name { get; set; }
         [Required]
-        [StringLength(15)]
-        public string Password { get; set; }
+        [StringLength(50)]
+        public string Salt { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string Hash { get; set; }
         public bool Is_Teacher { get; set; }
         public bool Is_Delated { get; set; }
         [Column(TypeName = "date")]

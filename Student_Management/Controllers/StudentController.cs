@@ -9,6 +9,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -109,8 +110,7 @@ namespace Student_Management.Controllers
                 {
                     newStudent.IsTeacher = false;
                 }
-                //string encPass=EncryptPassword(newStudent.Password);
-                //newStudent.Password = encPass;
+                
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri("http://localhost:53377/StudentApi/NewStudent");
@@ -123,6 +123,8 @@ namespace Student_Management.Controllers
             }
             return View();
         }
+        
+
         //public string EncryptPassword(string encPass)
         //{
         //    byte[] encDataByte = new byte[encPass.Length];
@@ -130,6 +132,7 @@ namespace Student_Management.Controllers
         //    string encodedData = Convert.ToBase64String(encDataByte);
         //    return encodedData;
         //}
+
         #endregion
 
         #region Get Student Marks

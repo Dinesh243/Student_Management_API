@@ -65,7 +65,10 @@ namespace StudentAppCore.Resource.StudentRepository
                             login.RegId = DBdetails.Reg_Id;
                             login.IsTeacher = DBdetails.Is_Teacher;
                         }
-                        login = null;
+                        else
+                        {
+                            login = null;
+                        }
                     }
 
                 }
@@ -75,27 +78,33 @@ namespace StudentAppCore.Resource.StudentRepository
         #endregion
 
         #region 
-        public bool VerifyPassword(string password, byte[] salt, byte[] hash)
+        public bool VerifyPassword(string password, string salt, string hash)
         {
-           
-            byte[] newHash;
-            using (var deriveBytes = new Rfc2898DeriveBytes(password, salt, 1000))
+            var algorithm = HashAlgorithm.Create("SHA1");
+            string stringToHash = String.Concat(password, salt);
+            byte[] newhash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(stringToHash));
+            string newHashinStr = string.Concat(newhash.Select(b => b.ToString("x2"))).ToLowerInvariant();
+            if (hash== newHashinStr)
             {
-                newHash = deriveBytes.GetBytes(8);
+                return true;
             }
-            if (newHash.Length != hash.Length)
-            {
-                return false;
-            }
-            for (int i = 0; i < newHash.Length; i++)
-            {
-                if (newHash[i] != hash[i])
-                {
-                    return false;
-                }
-            }
-            return true;
+            return false;
+            //byte[] StoredSaltinByte = Convert.FromBase64String(salt);
+            //byte[] StoredHashinByte = Convert.FromBase64String(hash);
+            //byte[] newHashinByte; string newHashinString;
+            //using (var deriveBytes = new Rfc2898DeriveBytes(password, StoredSaltinByte, 10000))
+            //{
+            //    newHashinByte = deriveBytes.GetBytes(15);
+            //    newHashinString = Convert.ToBase64String(newHashinByte);
+            //}
+
+            //if (newHashinByte.Length != StoredHashinByte.Length && hash != newHashinString)
+            //{
+            //    return false;
+            //}
+            //return true;
         }
+        #endregion
 
         #region NewStudent
         public NewStudentRegitration NewStudent(NewStudentRegitration newStudent)
@@ -103,7 +112,7 @@ namespace StudentAppCore.Resource.StudentRepository
             try
             {
                 string salt = GenerateSalt();
-                string hash = GenerateHash(newStudent.Password, salt);
+                string hash = GenerateHash1(newStudent.Password, salt);
                 //string hash = GenerateHash(newStudent.Password, salt);
                 NewStudentRegitration Obj = new NewStudentRegitration();
                 if (newStudent != null)
@@ -138,12 +147,12 @@ namespace StudentAppCore.Resource.StudentRepository
         }
         public string GenerateSalt()
         {
-            byte[] salt = new byte[8];
+            byte[] salt = new byte[15];
             using (var random = new RNGCryptoServiceProvider())
             {
                   random.GetBytes(salt);
             }
-            string randomSalt = Encoding.Default.GetString(salt);
+            string randomSalt = Convert.ToBase64String(salt);
             return randomSalt;
         }
         //private string CreatePasswordHash(string pwd, string salt)
@@ -152,17 +161,23 @@ namespace StudentAppCore.Resource.StudentRepository
         //    string hashedPwd = FormsAuthentication.HashPasswordForStoringInConfigFile(saltAndPwd, "sha1");
         //    return hashedPwd;
         //}
+        public string GenerateHash1(string password, string salt)
+        {
+            var algorithm = HashAlgorithm.Create("SHA1");
+            string stringToHash = String.Concat(password, salt);
+            byte[] hash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(stringToHash));
+            string encryptedVal = string.Concat(hash.Select(b => b.ToString("x2"))).ToLowerInvariant();
+            return encryptedVal;
+        }
         public string GenerateHash(string password, string salt)
         {
-            byte[] saltBytes = Encoding.Default.GetBytes(salt);
+            byte[] saltBytes = Convert.FromBase64String(salt);
             byte[] hash;
-            //byte[] saltBytes = salt ;
-
-            using (var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, saltBytes, 1000))
+            using (var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, saltBytes, 10000))
             {
-                hash = rfc2898DeriveBytes.GetBytes(8);
+                hash = rfc2898DeriveBytes.GetBytes(15);
             }
-            return Encoding.Default.GetString(hash);
+            return Convert.ToBase64String(hash);
         }
         #endregion
 
@@ -285,7 +300,7 @@ namespace StudentAppCore.Resource.StudentRepository
         public bool DeleteStudentMarks(int StdId)
         {
             bool IsDeleted = false;
-
+            
             if (StdId > 0)
             {
                 using (var Entity = new Student_ManagementContext())
@@ -336,3 +351,4 @@ namespace StudentAppCore.Resource.StudentRepository
 #endregion
     }
 }
+
